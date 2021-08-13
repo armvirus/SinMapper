@@ -1,6 +1,6 @@
 # SinMapper
 
-kernel driver mapper that forcefully loads any signed kernel driver (legit cert) with a big enough section (example: .data, .rdata) to map your driver over. the main focus of this project is to prevent modern anti-cheats (BattlEye, EAC) from finding your driver and having the power to hook anything due to being inside of legit memory (signed legit driver).
+usermode driver mapper that forcefully loads any signed kernel driver (legit cert) with a big enough section (example: .data, .rdata) to map your driver over. the main focus of this project is to prevent modern anti-cheats (BattlEye, EAC) from finding your driver and having the power to hook anything due to being inside of legit memory (signed legit driver).
 
 ## Procedure
 1. The usermode program loads a signed driver of your choice (signed with any valid cert, example: microsoft, intel, etc...)
