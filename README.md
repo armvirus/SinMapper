@@ -4,7 +4,7 @@ kernel driver mapper that forcefully loads any signed kernel driver (legit cert)
 
 ## Procedure
 1. The usermode program loads a signed driver of your choice (signed with any valid cert, example: microsoft, intel, etc...)
-2. Loads vulnerable driver to read/write physical memory which is needed for syscalls. credits: vdm (xerox)
+2. Loads vulnerable driver to read/write physical memory which is needed for syscalls. credits: [vdm (xerox)](https://githacks.org/_xeroxz/vdm)
 3. Changes the executable and writable bit of the page tables of the pe section of your choice where the wanted driver is going to be mapped.
 4. All traces of the vulnerable driver are cleared including MmUnloadedDrivers list and PiddbCacheTable
 5. The driver is mapped in the wanted pe section and the entry is called through syscalls.
