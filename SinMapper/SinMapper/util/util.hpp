@@ -670,7 +670,7 @@ namespace util
 		{
 			if (strcmp(reinterpret_cast<char*>(section_headers[i].Name), section_name.c_str()) == 0)
 			{
-				return { section_headers[i].VirtualAddress, section_headers[i].SizeOfRawData };
+				return { section_headers[i].VirtualAddress, section_headers[i].Misc.VirtualSize };
 			}
 		}
 
