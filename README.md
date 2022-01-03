@@ -24,8 +24,8 @@ The current example passes a structure with the image base and size of the mappe
 
 ![DbgView Example](./example.PNG)
 
-The project has been tested on ``Windows 10 20H2, 21H1, 21H2 & Windows 11``
 Discord: flushin#9408
+The project has been tested on ``Windows 10 20H2, 21H1, 21H2 & Windows 11``
 
 ## Usage
 
